@@ -289,7 +289,7 @@
     if (block) {
       await Asc.Editor.callMethod("StartAction", [
         "Block",
-        "AI (" + this.modelUI.name + ")",
+        "Alaya is Crunching Data",
       ]);
     }
 
@@ -302,7 +302,7 @@
         if (block)
           await Asc.Editor.callMethod("EndAction", [
             "Block",
-            "AI (" + this.modelUI.name + ")",
+            "Alaya is Crunching Data",
           ]);
         if (this.errorHandler) this.errorHandler(err);
         else {
@@ -319,7 +319,7 @@
     if (block)
       await Asc.Editor.callMethod("EndAction", [
         "Block",
-        "AI (" + this.modelUI.name + ")",
+        "Alaya is Crunching Data",
       ]);
     return result;
   };
@@ -420,16 +420,19 @@
 
     let requestBody = {};
     let processResult = function (data) {
-      let result = provider.getChatCompletionsResult(data, this.model);
-      if (result.content.length === 0) return "";
+      const result = data.data.result;
+      // let result = provider.getChatCompletionsResult(data, this.model);
+      // if (result.content.length === 0) return "";
+      if (result.length === 0) return "";
 
-      if (0 === result.content[0].indexOf("<think>")) {
-        let end = result.content[0].indexOf("</think>");
-        if (end !== -1)
-          result.content[0] = result.content[0].substring(end + 8);
-      }
+      // if (0 === result.content[0].indexOf("<think>")) {
+      //   let end = result.content[0].indexOf("</think>");
+      //   if (end !== -1)
+      //     result.content[0] = result.content[0].substring(end + 8);
+      // }
 
-      return result.content[0];
+      // return result.content[0];
+      return result;
     };
 
     if (1 === messages.length) {
@@ -447,7 +450,18 @@
 
       objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
 
-      let result = await requestWrapper(objRequest);
+      // let result = await requestWrapper(objRequest);
+      const result = await requestWrapper({
+        url: "https://api.linkinlegal.com/api/v1/chat/ai-chat",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: {
+          messages: requestBody.messages,
+        },
+      });
+
       if (result.error) {
         throw {
           error: result.error,

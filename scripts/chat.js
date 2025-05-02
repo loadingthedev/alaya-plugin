@@ -22,8 +22,10 @@
 
   let scrollbarList;
 
+  /**
+   * Remove <selection> and </selection> tags
+   */
   function removeSelectionTag(text) {
-    // Remove <selection> and </selection> tags
     return text.replace(/<selection>.*?<\/selection>/gis, "");
   }
 
@@ -271,7 +273,8 @@
         var prevTextareaVal = $("#input_message").val();
         $("#input_message").val(content);
         $("#input_message").select();
-        document.execCommand("copy");
+        // document.execCommand("copy");
+        document.navigator.clipboard.writeText(content);
         $("#input_message").val(prevTextareaVal);
       },
     },
