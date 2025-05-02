@@ -28,7 +28,7 @@
 
   // register contextmenu buttons
   let buttonMain = new Asc.ButtonContextMenu();
-  buttonMain.text = "AI";
+  buttonMain.text = "Linkinlegal";
   buttonMain.addCheckers("All");
 
   function chatWindowShow(attachedText) {
@@ -42,16 +42,15 @@
 
     let variation = {
       url: "chat.html",
-      description: window.Asc.plugin.tr("Chatbot"),
+      description: window.Asc.plugin.tr("Alaya"),
       isVisual: true,
       buttons: [],
       icons:
         "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
       isModal: false,
       isCanDocked: true,
-      type:
-        window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
-      EditorsSupport: ["word", "cell", "slide"],
+      type: "panel",
+      EditorsSupport: ["word"],
       size: [400, 400],
     };
 
@@ -73,7 +72,6 @@
     chatWindow.attachEvent("onChatMessage", async function (message) {
       let requestEngine = AI.Request.create(AI.ActionType.Chat);
       if (!requestEngine) return;
-
       let result = await requestEngine.chatRequest(message);
       if (!result) result = "";
 
@@ -426,7 +424,7 @@
 
   if (true) {
     let button1 = new Asc.ButtonContextMenu(buttonMain);
-    button1.text = "Chatbot";
+    button1.text = "Alaya";
     button1.separator = true;
     button1.addCheckers("All");
     button1.attachOnClick(async function () {
@@ -469,7 +467,7 @@
   if (true) {
     let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
     button1.separator = true;
-    button1.text = "Chatbot";
+    button1.text = "Ask Alaya";
     button1.icons = getToolBarButtonIcons("ask-ai");
     button1.attachOnClick(function (data) {
       chatWindowShow();
@@ -550,7 +548,7 @@
       capabilities === undefined ? AI.CapabilitiesUI.Chat : capabilities;
   }
 
-  AI.Actions[AI.ActionType.Chat] = new ActionUI("Ask AI", "ask-ai");
+  AI.Actions[AI.ActionType.Chat] = new ActionUI("Ask alaya", "ask-ai");
   AI.Actions[AI.ActionType.Summarization] = new ActionUI(
     "Summarization",
     "summarization"
