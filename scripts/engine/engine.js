@@ -360,11 +360,15 @@
         }
       } else {
       }
+      const token = localStorage.getItem("token");
 
       const result = await requestWrapper({
         url: "https://api.linkinlegal.com/api/v1/chat/ai-chat",
+        // url: "http://localhost:4000/api/v1/chat/ai-chat",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Cookie: `linkinlegal.sid=${token}`,
         },
         method: "POST",
         body: {
