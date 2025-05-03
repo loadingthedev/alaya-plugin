@@ -242,39 +242,37 @@
   };
 
   AI.Request = function (model) {
-    this.modelUI = model;
-    this.model = null;
-    this.errorHandler = null;
-
-    if ("" !== model.provider) {
-      let provider = null;
-      for (let i in AI.Providers) {
-        if (model.provider === AI.Providers[i].name) {
-          provider = AI.Providers[i];
-          break;
-        }
-      }
-
-      if (provider) {
-        for (let i = 0, len = provider.models.length; i < len; i++) {
-          if (
-            model.id === provider.models[i].id ||
-            model.id === provider.models[i].name
-          ) {
-            this.model = provider.models[i];
-          }
-        }
-      }
-    }
+    // this.modelUI = model;
+    // this.model = null;
+    // this.errorHandler = null;
+    // if ("" !== model.provider) {
+    //   let provider = null;
+    //   for (let i in AI.Providers) {
+    //     if (model.provider === AI.Providers[i].name) {
+    //       provider = AI.Providers[i];
+    //       break;
+    //     }
+    //   }
+    //   if (provider) {
+    //     for (let i = 0, len = provider.models.length; i < len; i++) {
+    //       if (
+    //         model.id === provider.models[i].id ||
+    //         model.id === provider.models[i].name
+    //       ) {
+    //         this.model = provider.models[i];
+    //       }
+    //     }
+    //   }
+    // }
   };
 
   AI.Request.create = function (action) {
-    let model = AI.Storage.getModelById(AI.Actions[action].model);
-    if (!model) {
-      onOpenSettingsModal();
-      return null;
-    }
-    return new AI.Request(model);
+    // let model = AI.Storage.getModelById(AI.Actions[action].model);
+    // if (!model) {
+    //   onOpenSettingsModal();
+    //   return null;
+    // }
+    return new AI.Request();
   };
 
   AI.Request.prototype.setErrorHandler = function (callback) {
@@ -326,58 +324,10 @@
 
   AI.Request.prototype._chatRequest = async function (content) {
     let provider = null;
-    if (this.modelUI) provider = AI.Storage.getProvider(this.modelUI.provider);
-
-    if (!provider) {
-      throw {
-        error: 1,
-        message: "Please select the correct model for action.",
-      };
-      return;
-    }
 
     let isUseCompletionsInsteadChat = false;
-    if (this.model) {
-      let isFoundChatCompletions = false;
-      let isFoundCompletions = false;
-      for (let i = 0, len = this.model.endpoints.length; i < len; i++) {
-        if (
-          this.model.endpoints[i] === AI.Endpoints.Types.v1.Chat_Completions
-        ) {
-          isFoundChatCompletions = true;
-          break;
-        }
-        if (this.model.endpoints[i] === AI.Endpoints.Types.v1.Completions) {
-          isFoundCompletions = true;
-          break;
-        }
-      }
-
-      if (isFoundCompletions && !isFoundChatCompletions)
-        isUseCompletionsInsteadChat = true;
-    }
 
     let isNoSplit = false;
-    let max_input_tokens = AI.InputMaxTokens["32k"];
-    if (
-      this.model &&
-      this.model.options &&
-      undefined !== this.model.options.max_input_tokens
-    )
-      max_input_tokens = this.model.options.max_input_tokens;
-
-    let header_footer_overhead = 500;
-    // for test chunks:
-    if (false) {
-      max_input_tokens = 50;
-      let header_footer_overhead = 0;
-    }
-
-    if (max_input_tokens < header_footer_overhead)
-      max_input_tokens = header_footer_overhead + 1000;
-
-    let headers = AI._getHeaders(provider);
-
     let isMessages = Array.isArray(content);
 
     if (isUseCompletionsInsteadChat && isMessages) {
@@ -391,47 +341,13 @@
     let input_tokens = isMessages ? 0 : Asc.OpenAIEncode(content).length;
 
     let messages = [];
-    if (input_tokens < max_input_tokens || isNoSplit) {
-      messages.push(content);
-    } else {
-      let chunkLen =
-        (((max_input_tokens - header_footer_overhead) / input_tokens) *
-          input_len) >>
-        0;
-      let currentLen = 0;
-      while (currentLen != input_len) {
-        let endSymbol = currentLen + chunkLen;
-        if (endSymbol >= input_len) endSymbol = undefined;
-        messages.push(content.substring(currentLen, endSymbol));
-        if (undefined === endSymbol) currentLen = input_len;
-        else currentLen = endSymbol;
-      }
-    }
-
-    let objRequest = {
-      headers: headers,
-      method: "POST",
-    };
-
-    let endpointType = isUseCompletionsInsteadChat
-      ? AI.Endpoints.Types.v1.Completions
-      : AI.Endpoints.Types.v1.Chat_Completions;
-    objRequest.url = AI._getEndpointUrl(provider, endpointType, this.model);
+    messages.push(content);
 
     let requestBody = {};
     let processResult = function (data) {
       const result = data.data.result;
-      // let result = provider.getChatCompletionsResult(data, this.model);
-      // if (result.content.length === 0) return "";
       if (result.length === 0) return "";
 
-      // if (0 === result.content[0].indexOf("<think>")) {
-      //   let end = result.content[0].indexOf("</think>");
-      //   if (end !== -1)
-      //     result.content[0] = result.content[0].substring(end + 8);
-      // }
-
-      // return result.content[0];
       return result;
     };
 
@@ -442,15 +358,9 @@
         } else {
           requestBody.messages = [{ role: "user", content: messages[0] }];
         }
-
-        objRequest.body = provider.getChatCompletions(requestBody, this.model);
       } else {
-        objRequest.body = provider.getCompletions({ text: messages[0] });
       }
 
-      objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
-
-      // let result = await requestWrapper(objRequest);
       const result = await requestWrapper({
         url: "https://api.linkinlegal.com/api/v1/chat/ai-chat",
         headers: {
