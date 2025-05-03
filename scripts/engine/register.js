@@ -144,7 +144,7 @@
   if (true) {
     let button1 = new Asc.ButtonContextMenu(buttonMain);
     button1.text = "Fix spelling & grammar";
-    button1.editors = ["word"];
+    button1.editors = ["word", "pdf"];
     button1.addCheckers("Selection");
     button1.attachOnClick(async function () {
       let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
@@ -163,7 +163,7 @@
 
     let button2 = new Asc.ButtonContextMenu(buttonMain);
     button2.text = "Rewrite differently";
-    button2.editors = ["word"];
+    button2.editors = ["word", "pdf"];
     button2.addCheckers("Selection");
     button2.attachOnClick(async function () {
       let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
@@ -180,7 +180,7 @@
 
     let button3 = new Asc.ButtonContextMenu(buttonMain);
     button3.text = "Make longer";
-    button3.editors = ["word"];
+    button3.editors = ["word", "pdf"];
     button3.addCheckers("Selection");
     button3.attachOnClick(async function (data) {
       let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
@@ -197,7 +197,7 @@
 
     let button4 = new Asc.ButtonContextMenu(buttonMain);
     button4.text = "Make shorter";
-    button4.editors = ["word"];
+    button4.editors = ["word", "pdf"];
     button4.addCheckers("Selection");
     button4.attachOnClick(async function (data) {
       let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
@@ -216,12 +216,12 @@
   if (true) {
     let button1 = new Asc.ButtonContextMenu(buttonMain);
     button1.text = "Text analysis";
-    button1.editors = ["word"];
+    button1.editors = ["word", "pdf"];
     button1.addCheckers("Selection");
 
     let button2 = new Asc.ButtonContextMenu(button1);
     button2.text = "Summarize";
-    button2.editors = ["word"];
+    button2.editors = ["word", "pdf"];
     button2.addCheckers("Selection");
     button2.attachOnClick(async function (data) {
       let requestEngine = AI.Request.create(AI.ActionType.Summarization);
@@ -238,7 +238,7 @@
 
     let button3 = new Asc.ButtonContextMenu(button1);
     button3.text = "Keywords";
-    button3.editors = ["word"];
+    button3.editors = ["word", "pdf"];
     button3.addCheckers("Selection");
     button3.attachOnClick(async function () {
       let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
@@ -256,12 +256,12 @@
   if (true) {
     let button1 = new Asc.ButtonContextMenu(buttonMain);
     button1.text = "Word analysis";
-    button1.editors = ["word"];
+    button1.editors = ["word", "pdf"];
     (button1.separator = true), button1.addCheckers("Selection");
 
     let button2 = new Asc.ButtonContextMenu(button1);
     button2.text = "Explain text in comment";
-    button2.editors = ["word"];
+    button2.editors = ["word", "pdf"];
     button2.addCheckers("Selection");
     button2.attachOnClick(async function () {
       let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
@@ -278,7 +278,7 @@
 
     let button3 = new Asc.ButtonContextMenu(button1);
     button3.text = "Explain text in hyperlink";
-    button3.editors = ["word"];
+    button3.editors = ["word", "pdf"];
     button3.addCheckers("Selection");
     button3.attachOnClick(async function () {
       let requestEngine = AI.Request.create(AI.ActionType.TextAnalyze);
@@ -297,12 +297,12 @@
   if (true) {
     let button1 = new Asc.ButtonContextMenu(buttonMain);
     button1.text = "Translate";
-    button1.editors = ["word"];
+    button1.editors = ["word", "pdf"];
     button1.addCheckers("Selection");
 
     let button2 = new Asc.ButtonContextMenu(button1);
     button2.text = "English";
-    button2.editors = ["word"];
+    button2.editors = ["word", "pdf"];
     button2.addCheckers("Selection");
     button2.data = "English";
     button2.attachOnClick(async function (data) {
@@ -359,12 +359,12 @@
     // TODO:
     let button1 = new Asc.ButtonContextMenu(buttonMain);
     button1.text = "Generate image from text";
-    button1.editors = ["word"];
+    button1.editors = ["word", "pdf"];
     button1.addCheckers("Selection");
 
     let button2 = new Asc.ButtonContextMenu(button1);
     button2.text = "256x256";
-    button2.editors = ["word"];
+    button2.editors = ["word", "pdf"];
     button2.addCheckers("Selection");
     button2.data = "256";
     button2.attachOnClick(function (data) {
