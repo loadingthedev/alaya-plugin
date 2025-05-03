@@ -43,7 +43,7 @@
       "type": "background",
 
       "isViewer": true,
-      "EditorsSupport": ["word"],
+      "EditorsSupport": ["word", "pdf"],
       "initDataType": "none",
       "buttons": [],
       "events": [

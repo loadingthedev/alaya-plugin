@@ -50,7 +50,7 @@
       isModal: false,
       isCanDocked: true,
       type: "panel",
-      EditorsSupport: ["word"],
+      EditorsSupport: ["word", "pdf"],
       size: [400, 400],
     };
 
@@ -406,7 +406,7 @@
         isVisual: true,
         buttons: [],
         isModal: false,
-        EditorsSupport: ["word", "cell", "slide"],
+        EditorsSupport: ["word", "cell", "slide", "pdf"],
         size: [1000, 1000],
       };
 
