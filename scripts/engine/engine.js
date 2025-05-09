@@ -360,11 +360,14 @@
         }
       } else {
       }
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token =
+        "s:jJumTnOQ5tVtv1bJbr5tJJEr0rzqwBm_.32ahl4jC1MObgoaOPXWp3UVL3BSST/2CAQn6wBqv9NU";
 
       const result = await requestWrapper({
-        url: "https://api.linkinlegal.com/api/v1/chat/ai-chat",
+        // url: "https://api.linkinlegal.com/api/v1/chat/ai-chat",
         // url: "http://localhost:4000/api/v1/chat/ai-chat",
+        url: "https://api.linkinlegal.com/py/main-chat",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -372,6 +375,15 @@
         },
         method: "POST",
         body: {
+          query: "hi",
+          country: "662b519563fd686438acd5cd",
+          file_id: "6814ca2a9f3fb5a7842834ba",
+          isUserUploaded: true,
+          con_cat: [],
+          chat_id: "6814ca2a9f3fb5a7842834bc",
+          file_ids: [],
+          folder_ids: [],
+          user_id: "659d0418eba41f92b41c29e0",
           messages: requestBody.messages,
         },
       });

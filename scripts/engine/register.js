@@ -465,7 +465,7 @@
   }
 
   if (true) {
-    let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
+    const button1 = new Asc.ButtonToolbar(buttonMainToolbar);
     button1.separator = true;
     button1.text = "Ask Alaya";
     button1.icons = getToolBarButtonIcons("ask-ai");
@@ -473,7 +473,7 @@
       chatWindowShow();
     });
 
-    let button2 = new Asc.ButtonToolbar(buttonMainToolbar);
+    const button2 = new Asc.ButtonToolbar(buttonMainToolbar);
     button2.text = "Summarization";
     button2.icons = getToolBarButtonIcons("summarization");
     button2.attachOnClick(async function (data) {
@@ -483,17 +483,7 @@
       onOpenSummarizationModal();
     });
 
-    /*
-		// TODO:
-		let button3 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button3.text = "Text to image";
-		button3.icons = getToolBarButtonIcons("text-to-image");
-		button3.attachOnClick(function(data){
-			console.log(data);
-		});
-		*/
-
-    let button4 = new Asc.ButtonToolbar(buttonMainToolbar);
+    const button4 = new Asc.ButtonToolbar(buttonMainToolbar);
     button4.text = "Translation";
     button4.icons = getToolBarButtonIcons("translation");
     button4.menu = [
@@ -524,6 +514,30 @@
       result = getTranslateResult(result, content);
       await Asc.Library.PasteText(result);
     });
+
+    const button5 = new Asc.ButtonToolbar(buttonMainToolbar);
+    button5.text = "Run Check";
+    button5.icons = getToolBarButtonIcons("run-check");
+    button5.menu = [
+      {
+        text: "Compliance",
+        id: "compliance",
+        onclick: () => {
+          // onTranslateSettingsModal();
+        },
+      },
+      {
+        text: "Guidelines",
+        id: "guidelines",
+        onclick: () => {
+          // onTranslateSettingsModal();
+        },
+      },
+    ];
+    button5.split = true;
+    button5.attachOnClick(function (data) {
+      // onOpenCountryModal();
+    });
   }
 
   // register actions
@@ -531,43 +545,20 @@
   var AI = window.AI;
 
   AI.ActionType = {
-    Chat: "Chat",
-    Summarization: "Summarization",
-    //Text2Image       : "Text2Image",
-    Translation: "Translation",
-    TextAnalyze: "TextAnalyze",
+    Country: "Country",
   };
 
   AI.Actions = {};
 
-  function ActionUI(name, icon, modelId, capabilities) {
+  function ActionUI(name, icon) {
     this.name = name || "";
     this.icon = icon || "";
-    this.model = modelId || "";
-    this.capabilities =
-      capabilities === undefined ? AI.CapabilitiesUI.Chat : capabilities;
   }
 
-  AI.Actions[AI.ActionType.Chat] = new ActionUI("Ask alaya", "ask-ai");
-  AI.Actions[AI.ActionType.Summarization] = new ActionUI(
-    "Summarization",
-    "summarization"
-  );
-  //AI.Actions[AI.ActionType.Text2Image]   = new ActionUI("Text to image", "text-to-image", "", AI.CapabilitiesUI.Image);
-  AI.Actions[AI.ActionType.Translation] = new ActionUI(
-    "Translation",
-    "translation"
-  );
-  AI.Actions[AI.ActionType.TextAnalyze] = new ActionUI("Text analysis", "");
+  AI.Actions[AI.ActionType.Country] = new ActionUI("Country", "country");
 
   AI.ActionsGetKeys = function () {
-    return [
-      AI.ActionType.Chat,
-      AI.ActionType.Summarization,
-      //AI.ActionType.Text2Image,
-      AI.ActionType.Translation,
-      AI.ActionType.TextAnalyze,
-    ];
+    return [AI.ActionType.Country];
   };
 
   AI.ActionsGetSorted = function () {
@@ -580,10 +571,9 @@
         id: keys[i],
         name: Asc.plugin.tr(src.name),
         icon: src.icon,
-        model: src.model,
-        capabilities: src.capabilities,
       };
     }
+
     return actions;
   };
 
@@ -616,9 +606,9 @@
     return false;
   };
 
-  AI.ActionsChange = function (id, model) {
+  AI.ActionsChange = function (id, value) {
     if (AI.Actions[id]) {
-      AI.Actions[id].model = model;
+      AI.Actions[id].value = value;
       AI.ActionsSave();
     }
   };

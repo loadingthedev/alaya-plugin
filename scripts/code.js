@@ -211,30 +211,45 @@ function updateModels() {
   if (settingsWindow) settingsWindow.command("onUpdateModels", models);
   if (aiModelsListWindow) aiModelsListWindow.command("onUpdateModels", models);
 }
+
 function updateActions() {
-  if (settingsWindow)
-    settingsWindow.command("onUpdateActions", AI.ActionsGetSorted());
+  if (settingsWindow) {
+    const list = AI.ActionsGetSorted();
+    settingsWindow.command("onUpdateActions", list);
+  }
+}
+
+async function getCountriesList() {
+  const result = await window.Asc.plugin.getCountries();
+  const countriesList = result.data.map((country) => ({
+    id: country._id,
+    name: country.name,
+    code: country.isoCode,
+  }));
+
+  if (settingsWindow) {
+    settingsWindow.command("onGetCountriesList", countriesList);
+  }
 }
 
 function onOpenSettingsModal() {
   let variation = {
     url: "settings.html",
-    description: window.Asc.plugin.tr("AI configuration"),
+    description: window.Asc.plugin.tr("Chat Configuration"),
     isVisual: true,
     buttons: [{ text: window.Asc.plugin.tr("OK"), primary: true }],
     isModal: true,
     EditorsSupport: ["word", "slide", "cell", "pdf"],
-    size: [320, 350],
+    size: [320, 400],
   };
 
   if (!settingsWindow) {
     settingsWindow = new window.Asc.PluginWindow();
-    settingsWindow.attachEvent("onInit", function () {
-      updateActions();
-      updateModels();
+    settingsWindow.attachEvent("onInit", async function () {
+      await getCountriesList();
     });
     settingsWindow.attachEvent("onChangeAction", function (data) {
-      AI.ActionsChange(data.id, data.model);
+      AI.ActionsChange(data.id, data.value);
     });
     settingsWindow.attachEvent("onOpenAiModelsModal", onOpenAiModelsModal);
   }
