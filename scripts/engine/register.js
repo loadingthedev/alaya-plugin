@@ -456,10 +456,17 @@
   }
 
   if (true) {
-    let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
+    const button1 = new Asc.ButtonToolbar(buttonMainToolbar);
     button1.text = "Settings";
     button1.icons = getToolBarButtonIcons("settings");
     button1.attachOnClick(function (data) {
+      onOpenSettingsModal();
+    });
+
+    const button2 = new Asc.ButtonToolbar(buttonMainToolbar);
+    button2.text = "Select Files";
+    button2.icons = getToolBarButtonIcons("settings");
+    button2.attachOnClick(function (data) {
       onOpenSettingsModal();
     });
   }
